@@ -1,25 +1,29 @@
 package gui.fxcontroller;
 
-import gui.NetInterface;
+import gui.fxcontroller.lobby.Lobby;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
-import main.Client;
+import javafx.stage.Stage;
+import gui.FXApplication;
+import net.TicTacToeClient;
+
+import java.io.IOException;
 
 /**
  * The controller class for res/fxml/signup.fxml, the sign-up prompt for TicTacToe.
  * Adds functionality like sign-up or error messages to the fxml.
- * Gets called by {@link javafx.fxml.FXMLLoader} by {@link Client#loadSignup()}.
- * 
- * @see NetInterface - provides functions which call various other functions from the net package
+ * Gets called by {@link javafx.fxml.FXMLLoader} by {@link FXApplication#start(Stage)}.
  * 
  * @author Kilian Friedrich
  */
-public class Signup implements NetInterface {
+public class Signup {
 
     /**
      * The text field in which the user types his username
-     * Gets assigned by the {@link javafx.fxml.FXMLLoader} when the signup prompt gets loaded by {@link Client#loadSignup()}
+     * Gets assigned by the {@link javafx.fxml.FXMLLoader} when the signup prompt gets loaded by {@link FXApplication#start(Stage)}
      * 
      * @see #updateErrorMessage(String) - prints error messages on wrong input (shown in {@link #errField})
      */
@@ -27,11 +31,19 @@ public class Signup implements NetInterface {
 
     /**
      * The text field in which error messages are displayed.
-     * Gets assigned by the {@link javafx.fxml.FXMLLoader} when the signup prompt gets loaded by {@link Client#loadSignup()}
+     * Gets assigned by the {@link javafx.fxml.FXMLLoader} when the signup prompt gets loaded by {@link FXApplication#start(Stage)}
      * 
      * @see #updateErrorMessage(String) - updates this field's content
      */
     @FXML public Text errField;
+
+    protected TicTacToeClient serverConnection;
+
+    public Signup(TicTacToeClient serverConnection) {
+
+        this.serverConnection = serverConnection;
+
+    }
 
     /**
      * Gets called when the variables {@link #usernameField} and {@link #errField} are set.
@@ -64,10 +76,6 @@ public class Signup implements NetInterface {
 
         if(value.isEmpty())
             errField.setText("Enter a username.");
-        else if(!value.matches("[-._a-zA-Z0-9]+"))  // checks if only valid characters are in the username
-            errField.setText("Only use \"-\", \".\", \"_\", numbers and chars.");
-        else if(loggedIn(value))  // checks if a user with the username is already logged in (using NetInterface)
-            errField.setText("User " + value + " does already exist.");
         else {  // no error
             errField.setText("");
             return false;  // false = no error
@@ -80,19 +88,33 @@ public class Signup implements NetInterface {
     /**
      * Gets called when "Sign-Up" (see res/fxml/signup.fxml) is pressed.
      * Signs the user up after checking the validity of his username (see {@link #updateErrorMessage(String) updateErrorMessage(value)})
-     * and redirects him to the lobby (see res/fxml/lobby.fxml and {@link Client#loadLobby()}.
+     * and redirects him to the lobby (see res/fxml/lobby.fxml).
      *
      * @see #updateErrorMessage(String) - checks the validity of a username
-     * @see NetInterface#signup(String) - signs a user up
-     * @see Client#loadLobby() - loads the lobby scene
      *
      * @author Kilian Friedrich
      */
     @FXML public void signup() {
 
-        if(!updateErrorMessage(usernameField.getText()) && signup(usernameField.getText())) {
+        if(!updateErrorMessage(usernameField.getText())) {
 
-            Client.loadLobby();
+            String serverResponse = serverConnection.signup(usernameField.getText());
+
+            if(serverResponse != null && serverResponse.startsWith("gamelobbies")) {
+
+                try {
+
+                    FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/signup.fxml"));
+                    fxmlLoader.setController(new Lobby(serverConnection, serverResponse));
+
+                    ((Stage) usernameField.getScene().getWindow()).setScene(new Scene(fxmlLoader.load()));
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    ((Stage) usernameField.getScene().getWindow()).close();
+                }
+
+            }
 
         }
 
