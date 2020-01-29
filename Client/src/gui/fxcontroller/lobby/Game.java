@@ -1,26 +1,31 @@
 package gui.fxcontroller.lobby;
 
+import gui.fxcontroller.TicTacToeMatch;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 import net.TicTacToeClient;
 
-import java.util.UUID;
+import java.io.IOException;
 
 public class Game {
 
     protected TicTacToeClient serverConnection;
     protected String gameID, gameName, creatorName;
 
-    Game(TicTacToeClient serverConnection, String gameID, String gameName, String creatorName) {
+    Game(Lobby lobbyObject, TicTacToeClient serverConnection, String gameID, String gameName, String creatorName) {
 
+        this.lobbyObject = lobbyObject;
         this.gameID = gameID;
         this.gameName = gameName;
         this.creatorName = creatorName;
 
     }
 
-    private Lobby lobby;
+    private Lobby lobbyObject;
 
     @FXML public Text gameNameField;
     @FXML public Text creatorNameField;
@@ -28,20 +33,25 @@ public class Game {
 
     @FXML public void join() {
 
-        String serverResponse = serverConnection.join(UUID.fromString(gameID));
+        String serverResponse = serverConnection.join(gameID);
 
         if(serverResponse.startsWith("ok")) {
 
-            //TODO join game
+            try {
+
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/match.fxml"));
+                fxmlLoader.setController(new TicTacToeMatch(lobbyObject, serverConnection, gameID, null, Byte.parseByte(serverResponse.split(" ", 2)[1])));
+
+                ((Stage) parent.getScene().getWindow()).setScene(new Scene(fxmlLoader.load()));
+
+            } catch(IOException e) {
+                e.printStackTrace();
+                ((Stage) parent.getScene().getWindow()).close();
+            }
 
         }
 
     }
-
-    public void setOrigin(Lobby lobby) { this.lobby = lobby; }
-
-    String getGameName() { return gameName; }
-    String getCreatorName() { return creatorName; }
     String getGameID() { return gameID; }
     AnchorPane getParent() { return parent; }
 

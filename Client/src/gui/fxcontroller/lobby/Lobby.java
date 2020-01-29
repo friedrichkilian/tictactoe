@@ -1,7 +1,9 @@
 package gui.fxcontroller.lobby;
 
+import gui.fxcontroller.TicTacToeMatch;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
@@ -50,17 +52,27 @@ public class Lobby {
 
         if(serverResponse != null && serverResponse.startsWith("ok")) {
 
-            //TODO join match
+            try {
+
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/match.fxml"));
+                fxmlLoader.setController(new TicTacToeMatch(this, serverConnection, serverResponse.split(" ", 2)[1], null, (byte) 0));
+
+                ((Stage) gameContainer.getScene().getWindow()).setScene(new Scene(fxmlLoader.load()));
+
+            } catch(IOException e) {
+                e.printStackTrace();
+                ((Stage) gameContainer.getScene().getWindow()).close();
+            }
 
         }
 
     }
 
-    private void addGameEntry(String gameName, String id, String creatorName) {
+    public void addGameEntry(String gameName, String id, String creatorName) {
 
         try {
 
-            Game game = new Game(serverConnection, gameName, creatorName, id);
+            Game game = new Game(this, serverConnection, gameName, creatorName, id);
             games.add(game);
 
             FXMLLoader fxmlLoader = new FXMLLoader(Lobby.class.getResource("/fxml/lobby/gameentry.fxml"));
@@ -77,7 +89,11 @@ public class Lobby {
         }
 
     }
-    private void removeGameEntry(String id) {
+
+    public Scene getScene() { return gameContainer.getScene(); }
+
+
+    public void removeGameEntry(String id) {
 
         for(Game game : games)
             if(game.getGameID().equals(id)) {

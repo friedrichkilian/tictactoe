@@ -104,7 +104,7 @@ public class Signup {
 
                 try {
 
-                    FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/signup.fxml"));
+                    FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/lobby.fxml"));
                     fxmlLoader.setController(new Lobby(serverConnection, serverResponse));
 
                     ((Stage) usernameField.getScene().getWindow()).setScene(new Scene(fxmlLoader.load()));
