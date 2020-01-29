@@ -22,7 +22,7 @@ public class Lobby {
     @FXML public void initialize() {
 
         try {
-            noGamePane = new FXMLLoader(Lobby.class.getResource("/nogames.fxml")).load();
+            noGamePane = new FXMLLoader(Lobby.class.getResource("/fxml/nogames.fxml")).load();
         } catch(IOException e) {
             e.printStackTrace();
         }
@@ -79,7 +79,7 @@ public class Lobby {
 
             try {
 
-                FXMLLoader l = new FXMLLoader(Lobby.class.getResource("/gameentry.fxml"));
+                FXMLLoader l = new FXMLLoader(Lobby.class.getResource("/fxml/gameentry.fxml"));
                 entry = l.load();
                 GameController ctrl = l.getController();
                 ctrl.setGameName(gameName);

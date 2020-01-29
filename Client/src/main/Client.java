@@ -24,16 +24,16 @@ public class Client extends Application {
 
         stage.setTitle("TicTacToe");
 
-        loadLogin();
+        loadSignup();
         stage.show();
 
     }
 
-    public static void loadLogin() { instance.lLogin(); }
-    public void lLogin() {
+    public static void loadSignup() { instance.lSignup(); }
+    public void lSignup() {
 
         try {
-            stage.setScene(new Scene(new FXMLLoader(Client.class.getResource("/login.fxml")).load()));
+            stage.setScene(new Scene(new FXMLLoader(Client.class.getResource("/fxml/signup.fxml")).load()));
         } catch(IOException e) {
             e.printStackTrace();
         }
@@ -44,7 +44,7 @@ public class Client extends Application {
     public void lLobby() {
 
         try {
-            stage.setScene(new Scene(new FXMLLoader(Client.class.getResource("/lobby.fxml")).load()));
+            stage.setScene(new Scene(new FXMLLoader(Client.class.getResource("/fxml/lobby.fxml")).load()));
         } catch(IOException e) {
             e.printStackTrace();
         }

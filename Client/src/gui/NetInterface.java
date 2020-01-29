@@ -1,6 +1,6 @@
 package gui;
 
-public interface ServerInterface {
+public interface NetInterface {
 
     default boolean loggedIn(String username) {
 
@@ -9,7 +9,7 @@ public interface ServerInterface {
 
     }
 
-    default boolean login(String username) {
+    default boolean signup(String username) {
 
         //TODO
         return true;
