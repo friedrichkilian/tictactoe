@@ -92,7 +92,7 @@ public class TicTacToeClient extends Client {
 
     public String join(String gameID) {
 
-        return "ok 0";
+        return "ok 1";
 
         /*send("join " + gameID);
 
@@ -130,7 +130,7 @@ public class TicTacToeClient extends Client {
 
     public String pick(int field) {
 
-        return "updatefield 3 x";
+        return "ok";
 
         /*this.send("pick " + field);
 

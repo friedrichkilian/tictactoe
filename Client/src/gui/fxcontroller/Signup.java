@@ -15,7 +15,7 @@ import java.io.IOException;
 /**
  * The controller class for res/fxml/signup.fxml, the sign-up prompt for TicTacToe.
  * Adds functionality like sign-up or error messages to the fxml.
- * Gets called by {@link javafx.fxml.FXMLLoader} by {@link FXApplication#start(Stage)}.
+ * Gets called by {@link FXApplication#start(Stage)}.
  * 
  * @author Kilian Friedrich
  */
@@ -37,13 +37,40 @@ public class Signup {
      */
     @FXML public Text errField;
 
+    /**
+     * The window in which the Tic Tac Toe game takes place.
+     * The lobby scene will be loaded in that object.
+     *
+     * @see #signup() - loading the {@link Lobby} object into the window
+     */
+    protected Stage primaryStage;
+
+    /**
+     * Represents connection to the Tic Tac Toe host server.
+     * Requests will be send via this object, the object itself will send request using the TTTP (see {@link TicTacToeClient}).
+     *
+     * @see TicTacToeClient - describes the TTTP (TicTacToe Protocol)
+     */
     protected TicTacToeClient serverConnection;
 
-    public Signup(TicTacToeClient serverConnection) {
+    /**
+     * Default constructor.
+     * Stores assigned parameters in local variables
+     *
+     * @param primaryStage - the window in which the TicTacToe game takes place
+     * @param serverConnection - represents the connection to the Tic Tac Toe host server
+     *
+     * @see #primaryStage - the window in which the TicTacToe game takes place
+     * @see #serverConnection - represents the connection to the Tic Tac Toe host server
+     *
+     * @author Kilian Friedrich
+     */
+    public Signup(Stage primaryStage, TicTacToeClient serverConnection) {
 
+        this.primaryStage = primaryStage;
         this.serverConnection = serverConnection;
 
-    }
+    } // END constructor Signup(String, TicTacToeClient)
 
     /**
      * Gets called when the variables {@link #usernameField} and {@link #errField} are set.
@@ -58,7 +85,7 @@ public class Signup {
         // ignores the observed TextField (already stored in usernameField) and old value (not needed) on updateErrorMessage(String) call
         usernameField.textProperty().addListener((ignored1, ignored2, newValue) -> updateErrorMessage(newValue));
 
-    }
+    } // END function initialize()
 
     /**
      * Gets called on usernameFields update (see res/fxml/signup.fxml) or when "Sign-Up" is pressed.
@@ -83,7 +110,7 @@ public class Signup {
 
         return true;  // true = error
 
-    }
+    } // END function updateErrorMessage(String)
 
     /**
      * Gets called when "Sign-Up" (see res/fxml/signup.fxml) is pressed.
@@ -104,20 +131,20 @@ public class Signup {
 
                 try {
 
-                    FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/lobby.fxml"));
-                    fxmlLoader.setController(new Lobby(serverConnection, serverResponse));
+                    FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/lobby/lobby.fxml"));
+                    fxmlLoader.setController(new Lobby(primaryStage, serverConnection, serverResponse));
 
-                    ((Stage) usernameField.getScene().getWindow()).setScene(new Scene(fxmlLoader.load()));
+                    primaryStage.setScene(new Scene(fxmlLoader.load()));
 
                 } catch (IOException e) {
                     e.printStackTrace();
-                    ((Stage) usernameField.getScene().getWindow()).close();
+                    primaryStage.close();
                 }
 
-            }
+            } // END if(serverResponse != null && ...)
 
-        }
+        } // END if(!updateErrorMessage(...))
 
-    }
+    } // END function signup()
 
-}
+} // END class Signup

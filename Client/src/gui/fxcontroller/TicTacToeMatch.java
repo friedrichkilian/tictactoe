@@ -48,7 +48,7 @@ public class TicTacToeMatch {
             return;
 
         affectedField.getGraphicsContext2D().setStroke(Color.RED);
-        affectedField.getGraphicsContext2D().strokeOval(10D, 10D, 90D, 90D);
+        affectedField.getGraphicsContext2D().strokeOval(10D, 10D, 40D, 40D);
 
         yourTurn = 1;
         turnField.setText("It's your turn!");
@@ -62,15 +62,15 @@ public class TicTacToeMatch {
 
         initialize();
 
-        field0.getGraphicsContext2D().clearRect(0D, 0D, 100D, 100D);
-        field1.getGraphicsContext2D().clearRect(0D, 0D, 100D, 100D);
-        field2.getGraphicsContext2D().clearRect(0D, 0D, 100D, 100D);
-        field3.getGraphicsContext2D().clearRect(0D, 0D, 100D, 100D);
-        field4.getGraphicsContext2D().clearRect(0D, 0D, 100D, 100D);
-        field5.getGraphicsContext2D().clearRect(0D, 0D, 100D, 100D);
-        field6.getGraphicsContext2D().clearRect(0D, 0D, 100D, 100D);
-        field7.getGraphicsContext2D().clearRect(0D, 0D, 100D, 100D);
-        field8.getGraphicsContext2D().clearRect(0D, 0D, 100D, 100D);
+        field0.getGraphicsContext2D().clearRect(0D, 0D, 50D, 50D);
+        field1.getGraphicsContext2D().clearRect(0D, 0D, 50D, 50D);
+        field2.getGraphicsContext2D().clearRect(0D, 0D, 50D, 50D);
+        field3.getGraphicsContext2D().clearRect(0D, 0D, 50D, 50D);
+        field4.getGraphicsContext2D().clearRect(0D, 0D, 50D, 50D);
+        field5.getGraphicsContext2D().clearRect(0D, 0D, 50D, 50D);
+        field6.getGraphicsContext2D().clearRect(0D, 0D, 50D, 50D);
+        field7.getGraphicsContext2D().clearRect(0D, 0D, 50D, 50D);
+        field8.getGraphicsContext2D().clearRect(0D, 0D, 50D, 50D);
         for(byte i = 0; i < 9; i++) state[i] = 0;
 
     }
@@ -78,9 +78,12 @@ public class TicTacToeMatch {
     public TicTacToeMatch(Lobby lobbyObject, TicTacToeClient serverConnection, String gameID, String opponent, byte yourTurn) {
 
         this.serverConnection = serverConnection;
+        this.lobbyObject = lobbyObject;
         this.gameID = gameID;
         this.opponent = opponent;
         this.yourTurn = yourTurn;
+
+        serverConnection.setCurrentGame(this);
 
     }
 
@@ -97,9 +100,9 @@ public class TicTacToeMatch {
 
         gameidField.setText("Game-ID: " + gameID);
 
-        if(yourTurn == -1)
+        if(yourTurn == 1)
             turnField.setText("Your Turn!");
-        else if(yourTurn == 1)
+        else if(yourTurn == -1)
             turnField.setText("Opponent's turn!");
         else
             turnField.setText("");
@@ -122,15 +125,21 @@ public class TicTacToeMatch {
 
             canvas.getGraphicsContext2D().setStroke(Color.GRAY);
             canvas.getGraphicsContext2D().setLineWidth(5);
-            canvas.getGraphicsContext2D().strokeLine(10D, 10D, 90D, 90D);
+            canvas.getGraphicsContext2D().strokeLine(10D, 10D, 40D, 40D);
+            canvas.getGraphicsContext2D().strokeLine(40D, 10D, 10D, 40D);
 
             String response = serverConnection.pick(field);
 
             if(response.startsWith("ok")) {
 
-                canvas.getGraphicsContext2D().setStroke(Color.GRAY);
+                canvas.getGraphicsContext2D().setStroke(Color.RED);
                 canvas.getGraphicsContext2D().setLineWidth(5);
-                canvas.getGraphicsContext2D().strokeLine(10D, 10D, 90D, 90D);
+                canvas.getGraphicsContext2D().strokeLine(10D, 10D, 40D, 40D);
+                canvas.getGraphicsContext2D().strokeLine(40D, 10D, 10D, 40D);
+
+            } else {
+
+                canvas.getGraphicsContext2D().clearRect(0D, 0D, 50D, 50D);
 
             }
 

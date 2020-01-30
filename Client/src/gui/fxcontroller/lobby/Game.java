@@ -16,7 +16,9 @@ public class Game {
     protected TicTacToeClient serverConnection;
     protected String gameID, gameName, creatorName;
 
-    Game(Lobby lobbyObject, TicTacToeClient serverConnection, String gameID, String gameName, String creatorName) {
+    Game(Lobby lobbyObject, TicTacToeClient serverConnection, String gameName, String creatorName, String gameID) {
+
+        this.serverConnection = serverConnection;
 
         this.lobbyObject = lobbyObject;
         this.gameID = gameID;
@@ -31,6 +33,13 @@ public class Game {
     @FXML public Text creatorNameField;
     @FXML public AnchorPane parent;
 
+    @FXML public void initialize() {
+
+        gameNameField.setText(gameName);
+        creatorNameField.setText("by " + creatorName);
+
+    }
+
     @FXML public void join() {
 
         String serverResponse = serverConnection.join(gameID);
@@ -40,7 +49,7 @@ public class Game {
             try {
 
                 FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/match.fxml"));
-                fxmlLoader.setController(new TicTacToeMatch(lobbyObject, serverConnection, gameID, null, Byte.parseByte(serverResponse.split(" ", 2)[1])));
+                fxmlLoader.setController(new TicTacToeMatch(lobbyObject, serverConnection, gameID, creatorName, Byte.parseByte(serverResponse.split(" ", 2)[1])));
 
                 ((Stage) parent.getScene().getWindow()).setScene(new Scene(fxmlLoader.load()));
 

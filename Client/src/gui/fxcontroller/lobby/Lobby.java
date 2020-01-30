@@ -12,23 +12,109 @@ import net.TicTacToeClient;
 
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.Set;
 
+/**
+ * The controller class for /res/lobby/lobby.fxml.
+ * Gets created and loaded by the {@link gui.fxcontroller.Signup} prompt.
+ *
+ * The lobby is used to find games or create new ones.
+ * It consists of two parts: The game list (listing all available games, see /res/fxml/lobby/gameentry.fxml) and a prompt to create a new list.
+ *
+ * This object stays loaded when matches are running so that the game list stay updated.
+ *
+ * @author Kilian Friedrich
+ */
 public class Lobby {
 
-    private String startGames;
-    private HashSet<Game> games;
-    private AnchorPane noGamePane;
-
-    @FXML public TextField gameNameField;
-    @FXML public VBox gameContainer;
-
+    /**
+     * Represents connection to the Tic Tac Toe host server.
+     * Requests will be send via this object, the object itself will send request using the TTTP (see {@link TicTacToeClient}).
+     *
+     * @see TicTacToeClient - describes the TTTP (TicTacToe Protocol)
+     */
     protected TicTacToeClient serverConnection;
 
-    public Lobby(TicTacToeClient serverConnection, String gamelobbies) {
+    /**
+     * The window in which the Tic Tac Toe game takes place.
+     * The TicTacToeMatch scene will be loaded in that object.
+     *
+     * @see #joinNewGame() - loading a new game into the window
+     * @see Game#join() - loading a {@link Game} into the window
+     */
+    protected Stage primaryStage;
 
+    /**
+     * The server response from the login, starting with "gamelobbies ".
+     * It represents a list of available games.
+     *
+     * The String is passed in the constructor but can't be initialized until all FXML fields are assigned.
+     * Hence, it needs to be stored.
+     *
+     * The list may change over time, when games are {@link #addGameEntry(String, String, String) added} or {@link #removeGameEntry(String) removed}.
+     *
+     * @see #Lobby(Stage, TicTacToeClient, String) - declares this String
+     * @see #initialize() - uses this String to build a list of available games
+     */
+    private String startGames;
+
+    /**
+     * Stores the list of available games.
+     * This variable is changed on {@link #initialize() initialization} or when games are {@link #addGameEntry(String, String, String) added} or {@link #removeGameEntry(String) removed}.
+     *
+     * @see #startGames - the list of available games at the start
+     * @see #addGameEntry(String, String, String) - adds new games to this list
+     * @see #removeGameEntry(String) - removes games from this list
+     */
+    private Set<Game> games = new HashSet<>();
+
+    /**
+     * This pane (see /res/fxml/lobby/nogames.fxml) is displayed when no game is available.
+     * It simply says "No games available. You can create one below.".
+     *
+     * @see #initialize() - loads the resource /res/fxml/lobby/nogames.fxml into this variable
+     */
+    private AnchorPane noGamePane;
+
+    /**
+     * The field in which the user can type the name of a game which is created.
+     *
+     * @see #joinNewGame() - creates a new game
+     */
+    @FXML public TextField gameNameField;
+
+    /**
+     * The UI list of available games.
+     * Holds a lot of {@link Game game entries} as stored in {@link #games}.
+     *
+     * @see #games - the list of available games
+     */
+    @FXML public VBox gameContainer;
+
+    /**
+     * Default constructor.
+     * Stores assigned parameters in local variables.
+     *
+     * @param primaryStage - the window in which the TicTacToe game takes place
+     * @param serverConnection - represents the connection to the Tic Tac Toe host server
+     * @param startGames - a list of available games at lobby initialization (in String format)
+     *
+     * @see #primaryStage - the window in which the TicTacToe game takes place
+     * @see #serverConnection - represents the connection to the Tic Tac Toe host server
+     * @see #startGames - a list of available games at lobby initialization
+     *
+     * @author Kilian Friedrich
+     */
+    public Lobby(Stage primaryStage, TicTacToeClient serverConnection, String startGames) {
+
+        this.primaryStage = primaryStage;
         this.serverConnection = serverConnection;
+        this.startGames = startGames;
 
-    }
+        // register object so that it can receive server requests to add / remove games
+        serverConnection.setLobbyObject(this);
+
+    } // END constructor Lobby(String, TicTacToeClient, String)
 
     @FXML public void initialize() {
 
@@ -108,6 +194,5 @@ public class Lobby {
             gameContainer.getChildren().add(noGamePane);
 
     }
-
 
 }

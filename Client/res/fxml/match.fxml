@@ -1,26 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.canvas.Canvas?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.text.Text?>
+<?import javafx.scene.canvas.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="600.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.fxcontroller.TicTacToeMatch">
+<AnchorPane prefHeight="600.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1">
 
     <Text fx:id="opponentField" layoutX="50" layoutY="50" text="Waiting for opponent..." />
     <Text fx:id="gameidField" fill="#7c7c7c" layoutX="50" layoutY="65" text="Game-ID gameid" />
 
-    <Canvas fx:id="field0" onMouseClicked="#clickOnField0" height="50" layoutX="125" layoutY="325" width="50" /> <!-- Field 0|0 -->
-    <Canvas fx:id="field1" onMouseClicked="#clickOnField1" height="50" layoutX="175" layoutY="325" width="50" /> <!-- Field 0|1 -->
-    <Canvas fx:id="field2" onMouseClicked="#clickOnField2" height="50" layoutX="225" layoutY="325" width="50" /> <!-- Field 0|2 -->
-    <Canvas fx:id="field3" onMouseClicked="#clickOnField3" height="50" layoutX="125" layoutY="375" width="50" /> <!-- Field 1|0 -->
-    <Canvas fx:id="field4" onMouseClicked="#clickOnField4" height="50" layoutX="175" layoutY="375" width="50" /> <!-- Field 1|1 -->
-    <Canvas fx:id="field5" onMouseClicked="#clickOnField5" height="50" layoutX="225" layoutY="375" width="50" /> <!-- Field 1|2 -->
-    <Canvas fx:id="field6" onMouseClicked="#clickOnField6" height="50" layoutX="125" layoutY="425" width="50" /> <!-- Field 2|0 -->
-    <Canvas fx:id="field7" onMouseClicked="#clickOnField7" height="50" layoutX="175" layoutY="425" width="50" /> <!-- Field 2|1 -->
-    <Canvas fx:id="field8" onMouseClicked="#clickOnField8" height="50" layoutX="225" layoutY="425" width="50" /> <!-- Field 2|2 -->
+    <Canvas fx:id="field0" height="50" layoutX="125" layoutY="225" onMouseClicked="#clickOnField0" width="50" /> <!-- Field 0|0 -->
+    <Canvas fx:id="field1" height="50" layoutX="175" layoutY="225" onMouseClicked="#clickOnField1" width="50" /> <!-- Field 0|1 -->
+    <Canvas fx:id="field2" height="50" layoutX="225" layoutY="225" onMouseClicked="#clickOnField2" width="50" /> <!-- Field 0|2 -->
+    <Canvas fx:id="field3" height="50" layoutX="125" layoutY="275" onMouseClicked="#clickOnField3" width="50" /> <!-- Field 1|0 -->
+    <Canvas fx:id="field4" height="50" layoutX="175" layoutY="275" onMouseClicked="#clickOnField4" width="50" /> <!-- Field 1|1 -->
+    <Canvas fx:id="field5" height="50" layoutX="225" layoutY="275" onMouseClicked="#clickOnField5" width="50" /> <!-- Field 1|2 -->
+    <Canvas fx:id="field6" height="50" layoutX="125" layoutY="325" onMouseClicked="#clickOnField6" width="50" /> <!-- Field 2|0 -->
+    <Canvas fx:id="field7" height="50" layoutX="175" layoutY="325" onMouseClicked="#clickOnField7" width="50" /> <!-- Field 2|1 -->
+    <Canvas fx:id="field8" height="50" layoutX="225" layoutY="325" onMouseClicked="#clickOnField8" width="50" /> <!-- Field 2|2 -->
 
-    <Text fx:id="turnField" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="50" text="It's your turn!" />
-    <Button onAction="#leave" AnchorPane.bottomAnchor="50.0" AnchorPane.rightAnchor="50.0" text="Leave" />
+    <Line startX="125" startY="275" endX="275" endY="275" />
+    <Line startX="125" startY="325" endX="275" endY="325" />
+    <Line startX="175" startY="225" endX="175" endY="375" />
+    <Line startX="225" startY="225" endX="225" endY="375" />
+
+    <Text fx:id="turnField" text="It's your turn!" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="50" />
+    <Button onAction="#leave" text="Leave" AnchorPane.bottomAnchor="50.0" AnchorPane.rightAnchor="50.0" />
 
 </AnchorPane>

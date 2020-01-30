@@ -27,20 +27,20 @@ public class FXApplication extends Application {
 
     public static void main(String[] args) { launch(); }
 
-    public void start(Stage stage) {
+    public void start(Stage primaryStage) {
 
-        stage.setTitle("TicTacToe");
-        stage.setResizable(false);
+        primaryStage.setTitle("TicTacToe");
+        primaryStage.setResizable(false);
 
         try {
 
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/signup.fxml"));
-            fxmlLoader.setController(new Signup(new TicTacToeClient(SERVER_IP, SERVER_PORT)));
-            stage.setScene(new Scene(fxmlLoader.load()));
+            fxmlLoader.setController(new Signup(primaryStage, new TicTacToeClient(SERVER_IP, SERVER_PORT)));
+            primaryStage.setScene(new Scene(fxmlLoader.load()));
 
         } catch(IOException e) { e.printStackTrace(); }
 
-        stage.show();
+        primaryStage.show();
 
     }
 
