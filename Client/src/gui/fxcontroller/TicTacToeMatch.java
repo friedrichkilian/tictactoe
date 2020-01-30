@@ -17,12 +17,15 @@ public class TicTacToeMatch {
     public Text turnField;
     protected TicTacToeClient serverConnection;
     protected String opponent, gameID;
+    protected byte yourTurnNextRound;
     protected byte yourTurn;
     protected Lobby lobbyObject;
 
     public void opponentJoined(String opponentName, byte yourTurn) {
 
         this.yourTurn = yourTurn;
+        if(yourTurn == 1) yourTurnNextRound = -1;
+        else yourTurnNextRound = 1;
         this.opponent = opponentName;
 
         initialize();
@@ -81,7 +84,10 @@ public class TicTacToeMatch {
         this.lobbyObject = lobbyObject;
         this.gameID = gameID;
         this.opponent = opponent;
+
         this.yourTurn = yourTurn;
+        if(yourTurn == -1) yourTurnNextRound = 1;
+        else yourTurnNextRound = -1;
 
         serverConnection.setCurrentGame(this);
 
@@ -143,9 +149,18 @@ public class TicTacToeMatch {
 
             }
 
-            // TODO win/lose: restart? wait? leave? counter?
+            if(state[0] == 1 && state[1] == 1 && state[2] == 1 ||
+                    state[3] == 1 && state[4] == 1 && state[5] == 1 ||
+                    state[6] == 1 && state[7] == 1 && state[8] == 1 ||
+                    state[0] == 1 && state[3] == 1 && state[6] == 1 ||
+                    state[1] == 1 && state[4] == 1 && state[7] == 1 ||
+                    state[2] == 1 && state[5] == 1 && state[8] == 1) {
 
-            yourTurn = -1;
+                //TODO diagonal und gewinnen
+                //TODO verlieren
+
+            }
+                    yourTurn = -1;
             turnField.setText("Opponent's turn");
 
         }

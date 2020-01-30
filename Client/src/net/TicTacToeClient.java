@@ -58,8 +58,8 @@ public class TicTacToeClient extends Client {
 
             case "updatefield": currentGame.opponentPicked(Integer.parseInt(pMessage.split(" ", 2)[1])); break;
             case "opponentjoined": currentGame.opponentJoined(pMessage.split(" ", 3)[1], Integer.parseInt(pMessage.split(" ", 3)[2]) == 1 ? (byte)1 : -1); break;
-            case "addGame": lobbyObject.addGameEntry(pMessage.split(" ", 4)[1], pMessage.split(" ", 4)[2], pMessage.split(" ", 4)[3]); break;
-            case "delGame": lobbyObject.removeGameEntry(pMessage.split(" ", 2)[1]); break;
+            case "addgame": lobbyObject.addGameEntry(pMessage.split(" ", 4)[1], pMessage.split(" ", 4)[2], pMessage.split(" ", 4)[3]); break;
+            case "delgame": lobbyObject.removeGameEntry(pMessage.split(" ", 2)[1]); break;
             default: serverResponse = pMessage; notify();
 
         }

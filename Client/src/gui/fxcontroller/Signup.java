@@ -103,7 +103,7 @@ public class Signup {
 
         if(value.isEmpty())
             errField.setText("Enter a username.");
-        else {  // no error
+        else {
             errField.setText("");
             return false;  // false = no error
         }
