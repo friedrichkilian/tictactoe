@@ -62,8 +62,6 @@ public class Signup {
      *
      * @see #primaryStage - the window in which the TicTacToe game takes place
      * @see #serverConnection - represents the connection to the Tic Tac Toe host server
-     *
-     * @author Kilian Friedrich
      */
     public Signup(Stage primaryStage, TicTacToeClient serverConnection) {
 
@@ -77,8 +75,6 @@ public class Signup {
      * Adds a listener to the username text field which checks the validity of user names.
      * 
      * @see #usernameField - the field in which the user types its username
-     * 
-     * @author Kilian Friedrich
      */
     @FXML public void initialize() {
         
@@ -96,8 +92,6 @@ public class Signup {
      *
      * @see TextField#setText(String) - sets the text of a text field
      * @see #errField - the text field in which the error message is written
-     *
-     * @author Kilian Friedrich
      */
     private boolean updateErrorMessage(String value) {
 
@@ -118,8 +112,6 @@ public class Signup {
      * and redirects him to the lobby (see res/fxml/lobby.fxml).
      *
      * @see #updateErrorMessage(String) - checks the validity of a username
-     *
-     * @author Kilian Friedrich
      */
     @FXML public void signup() {
 

@@ -9,7 +9,7 @@
    <TextField fx:id="usernameField" layoutX="15.0" layoutY="15.0" prefHeight="25.0" prefWidth="210.0"
               promptText="Your username" style="-fx-border-radius: 10px 0px 0px 10px;" onAction="#signup" />
    <Button layoutX="226.0" layoutY="15.0" mnemonicParsing="false" onAction="#signup"
-           style="-fx-border-radius: 10px 0px 0px 10px;" text="Sign-Up"/>
+           style="-fx-border-radius: 10px 0px 0px 10px;" text="Sign-Up" focusTraversable="false" />
    <Text fx:id="errField" fill="RED" layoutX="15.0" layoutY="52.0" strokeType="OUTSIDE" strokeWidth="0.0"
          text="Please enter a username."/>
 </AnchorPane>

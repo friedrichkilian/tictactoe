@@ -57,17 +57,14 @@ public class TicTacToeClient extends Client {
         switch(pMessage.split(" ", 2)[0]) {
 
             case "updatefield": currentGame.opponentPicked(Integer.parseInt(pMessage.split(" ", 2)[1])); break;
-            case "opponentjoined": currentGame.opponentJoined(pMessage.split(" ", 3)[1], Integer.parseInt(pMessage.split(" ", 3)[2]) == 1 ? (byte)1 : -1); break;
+            case "opponentjoined": currentGame.opponentJoined(pMessage.split(" ", 3)[1], Byte.parseByte(pMessage.split(" ", 3)[2])); break;
+            case "oponentleft": currentGame.opponentLeft();
             case "addgame": lobbyObject.addGameEntry(pMessage.split(" ", 4)[1], pMessage.split(" ", 4)[2], pMessage.split(" ", 4)[3]); break;
             case "delgame": lobbyObject.removeGameEntry(pMessage.split(" ", 2)[1]); break;
+            case "error": new UnknownError(pMessage).printStackTrace();
             default: serverResponse = pMessage; notify();
 
         }
-
-        //TODO kein updatefield nach pick request!!!!!!!!!
-        //TODO playerjoinedmatch
-        //TODO win / lose after pick ?????
-        //TODO opponentleft
 
     }
 
@@ -75,7 +72,9 @@ public class TicTacToeClient extends Client {
 
         return "gamelobbies game1 1234 opponent1 game2 5678 opponent2";
 
-        /*send("login " + username);
+        /*serverResponse = null;
+
+        send("login " + username);
 
         try {
             wait(5000);
@@ -90,11 +89,13 @@ public class TicTacToeClient extends Client {
 
     }
 
-    public String join(String gameID) {
+    public synchronized String join(String gameID) {
 
         return "ok 1";
 
-        /*send("join " + gameID);
+        /*serverResponse = null;
+
+        send("join " + gameID);
 
         try {
             wait(5000);
@@ -109,11 +110,13 @@ public class TicTacToeClient extends Client {
 
     }
 
-    public String create(String game) {
+    public synchronized String create(String game) {
 
         return "ok 9012";
 
-        /*send ("create " + game);
+        /*serverResponse = null;
+
+        send ("create " + game);
 
         try {
             wait(5000);
@@ -128,11 +131,13 @@ public class TicTacToeClient extends Client {
 
     }
 
-    public String pick(int field) {
+    public synchronized String pick(int field) {
 
         return "ok";
 
-        /*this.send("pick " + field);
+        /*serverResponse = null;
+
+        this.send("pick " + field);
 
         try {
             wait(5000);
@@ -147,6 +152,6 @@ public class TicTacToeClient extends Client {
 
     }
 
-    public void leave () { /*send("leave");*/ }
+    public synchronized void leave () { /*send("leave");*/ }
 
 }

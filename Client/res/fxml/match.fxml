@@ -27,6 +27,6 @@
     <Line startX="225" startY="225" endX="225" endY="375" />
 
     <Text fx:id="turnField" text="It's your turn!" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="50" />
-    <Button onAction="#leave" text="Leave" AnchorPane.bottomAnchor="50.0" AnchorPane.rightAnchor="50.0" />
+    <Button onAction="#leave" text="Leave" AnchorPane.bottomAnchor="50.0" AnchorPane.rightAnchor="50.0" focusTraversable="false" />
 
 </AnchorPane>

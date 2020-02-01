@@ -10,5 +10,5 @@
     <Text fx:id="gameNameField" layoutX="14.0" layoutY="18.0" strokeType="OUTSIDE" strokeWidth="0.0"
           style="-fx-font-weight: bold;" text="Name"/>
     <Text fx:id="creatorNameField" layoutX="15.0" layoutY="41.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Creator"/>
-    <Button onAction="#join" layoutX="348.0" layoutY="13.0" mnemonicParsing="false" text="Join"/>
+    <Button onAction="#join" layoutX="348.0" layoutY="13.0" mnemonicParsing="false" text="Join" focusTraversable="false" />
 </AnchorPane>

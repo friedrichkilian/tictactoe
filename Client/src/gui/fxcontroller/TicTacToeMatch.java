@@ -2,33 +2,28 @@ package gui.fxcontroller;
 
 import gui.fxcontroller.lobby.Lobby;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import net.TicTacToeClient;
 
-import java.io.IOException;
-
 public class TicTacToeMatch {
 
     public Text turnField;
     protected TicTacToeClient serverConnection;
     protected String opponent, gameID;
-    protected byte yourTurnNextRound;
+    protected byte first;
     protected byte yourTurn;
     protected Lobby lobbyObject;
 
-    public void opponentJoined(String opponentName, byte yourTurn) {
+    public void opponentJoined(String opponentName, byte first) {
 
-        this.yourTurn = yourTurn;
-        if(yourTurn == 1) yourTurnNextRound = -1;
-        else yourTurnNextRound = 1;
+        this.first = first;
+        
         this.opponent = opponentName;
 
-        initialize();
+        reset();
 
     }
 
@@ -52,9 +47,23 @@ public class TicTacToeMatch {
 
         affectedField.getGraphicsContext2D().setStroke(Color.RED);
         affectedField.getGraphicsContext2D().strokeOval(10D, 10D, 40D, 40D);
+        
+        if(state[0] == -1 && state[1] == -1 && state[2] == -1 ||
+                state[3] == -1 && state[4] == -1 && state[5] == -1 ||
+                state[6] == -1 && state[7] == -1 && state[8] == -1 ||
+                state[0] == -1 && state[3] == -1 && state[6] == -1 ||
+                state[1] == -1 && state[4] == -1 && state[7] == -1 ||
+                state[2] == -1 && state[5] == -1 && state[8] == -1 ||
+                state[0] == -1 && state[4] == -1 && state[8] == -1 ||
+                state[2] == -1 && state[4] == -1 && state[6] == -1) {
 
-        yourTurn = 1;
-        turnField.setText("It's your turn!");
+            first = (byte) -first;
+            reset();
+
+        } else {
+            yourTurn = 1;
+            turnField.setText("It's your turn!");
+        }
 
     }
 
@@ -65,29 +74,17 @@ public class TicTacToeMatch {
 
         initialize();
 
-        field0.getGraphicsContext2D().clearRect(0D, 0D, 50D, 50D);
-        field1.getGraphicsContext2D().clearRect(0D, 0D, 50D, 50D);
-        field2.getGraphicsContext2D().clearRect(0D, 0D, 50D, 50D);
-        field3.getGraphicsContext2D().clearRect(0D, 0D, 50D, 50D);
-        field4.getGraphicsContext2D().clearRect(0D, 0D, 50D, 50D);
-        field5.getGraphicsContext2D().clearRect(0D, 0D, 50D, 50D);
-        field6.getGraphicsContext2D().clearRect(0D, 0D, 50D, 50D);
-        field7.getGraphicsContext2D().clearRect(0D, 0D, 50D, 50D);
-        field8.getGraphicsContext2D().clearRect(0D, 0D, 50D, 50D);
-        for(byte i = 0; i < 9; i++) state[i] = 0;
-
     }
 
-    public TicTacToeMatch(Lobby lobbyObject, TicTacToeClient serverConnection, String gameID, String opponent, byte yourTurn) {
+    public TicTacToeMatch(Lobby lobbyObject, TicTacToeClient serverConnection, String gameID, String opponent, byte first) {
 
         this.serverConnection = serverConnection;
         this.lobbyObject = lobbyObject;
         this.gameID = gameID;
         this.opponent = opponent;
 
-        this.yourTurn = yourTurn;
-        if(yourTurn == -1) yourTurnNextRound = 1;
-        else yourTurnNextRound = -1;
+        this.yourTurn = first;
+        this.first = first;
 
         serverConnection.setCurrentGame(this);
 
@@ -103,6 +100,8 @@ public class TicTacToeMatch {
 
         if(opponent != null)
             opponentField.setText("Playing against " + opponent);
+        else
+            opponentField.setText("Waiting for opponent...");
 
         gameidField.setText("Game-ID: " + gameID);
 
@@ -154,17 +153,39 @@ public class TicTacToeMatch {
                     state[6] == 1 && state[7] == 1 && state[8] == 1 ||
                     state[0] == 1 && state[3] == 1 && state[6] == 1 ||
                     state[1] == 1 && state[4] == 1 && state[7] == 1 ||
-                    state[2] == 1 && state[5] == 1 && state[8] == 1) {
+                    state[2] == 1 && state[5] == 1 && state[8] == 1 ||
+                    state[0] == 1 && state[4] == 1 && state[8] == 1 ||
+                    state[2] == 1 && state[4] == 1 && state[6] == 1) {
+                
+                first = (byte) -first;
+                reset();
 
-                //TODO diagonal und gewinnen
-                //TODO verlieren
-
+            } else {
+                yourTurn = -1;
+                turnField.setText("Opponent's turn");
             }
-                    yourTurn = -1;
-            turnField.setText("Opponent's turn");
 
         }
 
+    }
+    
+    protected synchronized void reset() {
+
+        this.yourTurn = this.first;
+        
+        initialize();
+        
+        field0.getGraphicsContext2D().clearRect(0D, 0D, 50D, 50D);
+        field1.getGraphicsContext2D().clearRect(0D, 0D, 50D, 50D);
+        field2.getGraphicsContext2D().clearRect(0D, 0D, 50D, 50D);
+        field3.getGraphicsContext2D().clearRect(0D, 0D, 50D, 50D);
+        field4.getGraphicsContext2D().clearRect(0D, 0D, 50D, 50D);
+        field5.getGraphicsContext2D().clearRect(0D, 0D, 50D, 50D);
+        field6.getGraphicsContext2D().clearRect(0D, 0D, 50D, 50D);
+        field7.getGraphicsContext2D().clearRect(0D, 0D, 50D, 50D);
+        field8.getGraphicsContext2D().clearRect(0D, 0D, 50D, 50D);
+        for(byte i = 0; i < 9; i++) state[i] = 0;
+        
     }
 
     @FXML public void leave() {

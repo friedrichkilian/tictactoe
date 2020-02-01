@@ -8,7 +8,7 @@
    <ScrollPane hbarPolicy="NEVER" prefHeight="550.0" prefWidth="400.0">
       <VBox fx:id="gameContainer" />
    </ScrollPane>
-   <Button layoutX="302.0" layoutY="555.0" mnemonicParsing="false" onAction="#joinNewGame" text="Create game" />
+   <Button layoutX="302.0" layoutY="555.0" mnemonicParsing="false" onAction="#joinNewGame" text="Create game" focusTraversable="false" />
    <TextField fx:id="gameNameField" layoutX="14.0" layoutY="555.0" onAction="#joinNewGame" prefHeight="25.0" prefWidth="285.0" promptText="Enter name of new game" />
    <Text fx:id="errField" fill="RED" layoutX="14.0" layoutY="593.0" strokeType="OUTSIDE" strokeWidth="0.0" />
 </AnchorPane>

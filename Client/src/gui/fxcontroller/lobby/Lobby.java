@@ -1,6 +1,5 @@
 package gui.fxcontroller.lobby;
 
-import gui.FXApplication;
 import gui.fxcontroller.TicTacToeMatch;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -116,8 +115,6 @@ public class Lobby {
      * @see #primaryStage - the window in which the TicTacToe game takes place
      * @see #serverConnection - represents the connection to the Tic Tac Toe host server
      * @see #startGames - a list of available games at lobby initialization
-     *
-     * @author Kilian Friedrich
      */
     public Lobby(Stage primaryStage, TicTacToeClient serverConnection, String startGames) {
 
@@ -137,8 +134,6 @@ public class Lobby {
      *
      * @see #noGamePane - the message to display if no game is available ("No games available. You can create one below.")
      * @see #startGames - a list of available games at lobby initialization (in String format)
-     *
-     * @author Kilian Friedrich
      */
     @FXML public void initialize() {
 
@@ -170,8 +165,6 @@ public class Lobby {
      *
      * @see TextField#setText(String) - sets the text of a text field
      * @see #errField - the text field in which the error message is written
-     *
-     * @author Kilian Friedrich
      */
     private boolean updateErrorMessage(String value) {
 
@@ -192,8 +185,6 @@ public class Lobby {
      * Gets called by {@link #gameNameField}'s onAction event and by a click on the 'Create' button (see /res/fxml/lobby/lobby.fxml).
      *
      * @see #serverConnection - used to send a request to create the new game.
-     *
-     * @author Kilian Friedrich
      */
     @FXML public void joinNewGame() {
 
@@ -230,8 +221,6 @@ public class Lobby {
      *
      * @see #games - all available games
      * @see #gameContainer - the container UI element which contains one UI element per game
-     *
-     * @author Kilian Friedrich
      */
     public void addGameEntry(String gameName, String id, String creatorName) {
 
@@ -261,8 +250,6 @@ public class Lobby {
      *
      * @see #gameContainer - the container UI element which contains one UI element per game
      * @see #noGamePane - the message to display if no game is available ("No games available. You can create one below.")
-     *
-     * @author Kilian Friedrich
      */
     public void removeGameEntry(String id) {
 
@@ -286,8 +273,6 @@ public class Lobby {
      * This is used by a {@link TicTacToeMatch} to leave and load the lobby scene back into the window.
      *
      * @return the lobby scene
-     *
-     * @author Kilian Friedrich
      */
     public Scene getScene() {
 
