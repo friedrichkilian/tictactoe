@@ -3,6 +3,7 @@ package gui.fxcontroller;
 import gui.fxcontroller.lobby.Lobby;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -57,6 +58,7 @@ public class TicTacToeMatch {
                 state[0] == -1 && state[4] == -1 && state[8] == -1 ||
                 state[2] == -1 && state[4] == -1 && state[6] == -1) {
 
+            opponentScoreByte++;
             first = (byte) -first;
             reset();
 
@@ -96,6 +98,10 @@ public class TicTacToeMatch {
     @FXML public Text opponentField;
     @FXML public Text gameidField;
 
+    @FXML public Label youScore;
+    protected byte youScoreByte = 0, opponentScoreByte = 0;
+    @FXML public Label opponentScore;
+
     @FXML public void initialize() {
 
         if(opponent != null)
@@ -104,6 +110,9 @@ public class TicTacToeMatch {
             opponentField.setText("Waiting for opponent...");
 
         gameidField.setText("Game-ID: " + gameID);
+
+        youScore.setText(Byte.toString(youScoreByte));
+        opponentScore.setText(Byte.toString(opponentScoreByte));
 
         if(yourTurn == 1)
             turnField.setText("Your Turn!");
@@ -156,7 +165,8 @@ public class TicTacToeMatch {
                     state[2] == 1 && state[5] == 1 && state[8] == 1 ||
                     state[0] == 1 && state[4] == 1 && state[8] == 1 ||
                     state[2] == 1 && state[4] == 1 && state[6] == 1) {
-                
+
+                youScoreByte++;
                 first = (byte) -first;
                 reset();
 

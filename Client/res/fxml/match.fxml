@@ -11,6 +11,16 @@
     <Text fx:id="opponentField" layoutX="50" layoutY="50" text="Waiting for opponent..." />
     <Text fx:id="gameidField" fill="#7c7c7c" layoutX="50" layoutY="65" text="Game-ID gameid" />
 
+    <Label fx:id="youScore" alignment="CENTER" layoutX="100" layoutY="85" prefHeight="100" prefWidth="90" text="0">
+      <font>
+         <Font size="40.0" />
+      </font></Label>
+    <Line endX="210" endY="135" startX="190" startY="135" />
+    <Label fx:id="opponentScore" alignment="CENTER" layoutX="210" layoutY="85" prefHeight="100" prefWidth="90" text="0">
+      <font>
+         <Font size="40.0" />
+      </font></Label>
+
     <Canvas fx:id="field0" height="50" layoutX="125" layoutY="225" onMouseClicked="#clickOnField0" width="50" /> <!-- Field 0|0 -->
     <Canvas fx:id="field1" height="50" layoutX="175" layoutY="225" onMouseClicked="#clickOnField1" width="50" /> <!-- Field 0|1 -->
     <Canvas fx:id="field2" height="50" layoutX="225" layoutY="225" onMouseClicked="#clickOnField2" width="50" /> <!-- Field 0|2 -->
@@ -21,12 +31,12 @@
     <Canvas fx:id="field7" height="50" layoutX="175" layoutY="325" onMouseClicked="#clickOnField7" width="50" /> <!-- Field 2|1 -->
     <Canvas fx:id="field8" height="50" layoutX="225" layoutY="325" onMouseClicked="#clickOnField8" width="50" /> <!-- Field 2|2 -->
 
-    <Line startX="125" startY="275" endX="275" endY="275" />
-    <Line startX="125" startY="325" endX="275" endY="325" />
-    <Line startX="175" startY="225" endX="175" endY="375" />
-    <Line startX="225" startY="225" endX="225" endY="375" />
+    <Line endX="275" endY="275" startX="125" startY="275" />
+    <Line endX="275" endY="325" startX="125" startY="325" />
+    <Line endX="175" endY="375" startX="175" startY="225" />
+    <Line endX="225" endY="375" startX="225" startY="225" />
 
     <Text fx:id="turnField" text="It's your turn!" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="50" />
-    <Button onAction="#leave" text="Leave" AnchorPane.bottomAnchor="50.0" AnchorPane.rightAnchor="50.0" focusTraversable="false" />
+    <Button focusTraversable="false" onAction="#leave" text="Leave" AnchorPane.bottomAnchor="50.0" AnchorPane.rightAnchor="50.0" />
 
 </AnchorPane>

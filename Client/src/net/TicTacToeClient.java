@@ -49,18 +49,18 @@ public class TicTacToeClient extends Client {
 
     public TicTacToeClient(String pServerIP, int pServerPort) { super(pServerIP, pServerPort); }
 
-    public void setCurrentGame(TicTacToeMatch game) { this.currentGame = currentGame; }
+    public void setCurrentGame(TicTacToeMatch game) { this.currentGame = game; }
     public void setLobbyObject(Lobby lobbyObject) { this.lobbyObject = lobbyObject; }
 
     public synchronized void processMessage(String pMessage) {
 
         switch(pMessage.split(" ", 2)[0]) {
 
-            case "updatefield": currentGame.opponentPicked(Integer.parseInt(pMessage.split(" ", 2)[1])); break;
-            case "opponentjoined": currentGame.opponentJoined(pMessage.split(" ", 3)[1], Byte.parseByte(pMessage.split(" ", 3)[2])); break;
-            case "oponentleft": currentGame.opponentLeft();
-            case "addgame": lobbyObject.addGameEntry(pMessage.split(" ", 4)[1], pMessage.split(" ", 4)[2], pMessage.split(" ", 4)[3]); break;
-            case "delgame": lobbyObject.removeGameEntry(pMessage.split(" ", 2)[1]); break;
+            case "updatefield": if(currentGame != null) currentGame.opponentPicked(Integer.parseInt(pMessage.split(" ", 2)[1])); break;
+            case "opponentjoined": if(currentGame != null) currentGame.opponentJoined(pMessage.split(" ", 3)[1], Byte.parseByte(pMessage.split(" ", 3)[2])); break;
+            case "oponentleft": if(currentGame != null) currentGame.opponentLeft();
+            case "addgame": if(lobbyObject != null) lobbyObject.addGameEntry(pMessage.split(" ", 4)[1], pMessage.split(" ", 4)[2], pMessage.split(" ", 4)[3]); break;
+            case "delgame": if(lobbyObject != null) lobbyObject.removeGameEntry(pMessage.split(" ", 2)[1]); break;
             case "error": new UnknownError(pMessage).printStackTrace();
             default: serverResponse = pMessage; notify();
 
@@ -70,9 +70,7 @@ public class TicTacToeClient extends Client {
 
     public synchronized String signup(String username) {
 
-        return "gamelobbies game1 1234 opponent1 game2 5678 opponent2";
-
-        /*serverResponse = null;
+        serverResponse = null;
 
         send("login " + username);
 
@@ -85,15 +83,13 @@ public class TicTacToeClient extends Client {
 
         String returnString = serverResponse;
         serverResponse = null;
-        return returnString;*/
+        return returnString;
 
     }
 
     public synchronized String join(String gameID) {
 
-        return "ok 1";
-
-        /*serverResponse = null;
+        serverResponse = null;
 
         send("join " + gameID);
 
@@ -106,15 +102,13 @@ public class TicTacToeClient extends Client {
 
         String returnString = serverResponse;
         serverResponse = null;
-        return returnString;*/
+        return returnString;
 
     }
 
     public synchronized String create(String game) {
 
-        return "ok 9012";
-
-        /*serverResponse = null;
+        serverResponse = null;
 
         send ("create " + game);
 
@@ -127,15 +121,13 @@ public class TicTacToeClient extends Client {
 
         String returnString = serverResponse;
         serverResponse = null;
-        return returnString;*/
+        return returnString;
 
     }
 
     public synchronized String pick(int field) {
 
-        return "ok";
-
-        /*serverResponse = null;
+        serverResponse = null;
 
         this.send("pick " + field);
 
@@ -148,10 +140,10 @@ public class TicTacToeClient extends Client {
 
         String returnString = serverResponse;
         serverResponse = null;
-        return returnString;*/
+        return returnString;
 
     }
 
-    public synchronized void leave () { /*send("leave");*/ }
+    public synchronized void leave () { send("leave"); }
 
 }

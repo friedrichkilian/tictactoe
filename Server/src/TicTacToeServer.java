@@ -7,6 +7,11 @@ import java.util.UUID;
  */
 public class TicTacToeServer extends Server
 {
+
+    public static void main(String[] args) {
+        new TicTacToeServer(80);
+    }
+
     // instance variables - replace the example below with your own
     List<Game> hostedGames = new List<Game>();
     List<Game> openGames = new List<Game>();
