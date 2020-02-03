@@ -103,9 +103,22 @@ public class Game
                 field[2] == -1 && field[5] == -1 && field[8] == -1 ||
                 field[0] == -1 && field[4] == -1 && field[8] == -1 ||
                 field[2] == -1 && field[4] == -1 && field[6] == -1) {
+            
              reset();
              pickStarter();
+            
+        } else {
+            
+            boolean allSet = true;
+            for(int i = 0; i < 9; i++)
+                if(state[i] == 0)
+                    allSet = false;
+            
+            if(allSet) {
+                reset();
+                pickStarter();
             }
+        }
     }
     
     public Player getGuest(){return guest;}
