@@ -25,7 +25,7 @@ public class Signup {
      * The text field in which the user types his username
      * Gets assigned by the {@link javafx.fxml.FXMLLoader} when the signup prompt gets loaded by {@link FXApplication#start(Stage)}
      * 
-     * @see #updateErrorMessage(String, String) - prints error messages on wrong input (shown in {@link #errField})
+     * @see #updateErrorMessage(String, String, String) - prints error messages on wrong input (shown in {@link #errField})
      */
     @FXML public TextField usernameField;
 
@@ -33,7 +33,7 @@ public class Signup {
      * The text field in which error messages are displayed.
      * Gets assigned by the {@link javafx.fxml.FXMLLoader} when the signup prompt gets loaded by {@link FXApplication#start(Stage)}
      * 
-     * @see #updateErrorMessage(String, String) - updates this field's content
+     * @see #updateErrorMessage(String, String, String) - updates this field's content
      */
     @FXML public Text errField;
     
@@ -80,8 +80,9 @@ public class Signup {
     @FXML public void initialize() {
         
         // ignores the observed TextField (already stored in usernameField) and old value (not needed) on updateErrorMessage(String) call
-        usernameField.textProperty().addListener((ignored1, ignored2, newValue) -> updateErrorMessage(newValue, "0"));
-        serverPortField.textProperty().addListener((ignored1, ignored2, newValue) -> updateErrorMessage("foo", newValue));
+        usernameField.textProperty().addListener((ignored1, ignored2, newValue) -> updateErrorMessage(newValue, "127.0.0.1", "80"));
+        serverIPField.textProperty().addListener((ignored1, ignored2, newValue) -> updateErrorMessage("foo", newValue, "80"));
+        serverPortField.textProperty().addListener((ignored1, ignored2, newValue) -> updateErrorMessage("foo", "127.0.0.1", newValue));
 
     } // END function initialize()
 
@@ -96,18 +97,23 @@ public class Signup {
      * @see TextField#setText(String) - sets the text of a text field
      * @see #errField - the text field in which the error message is written
      */
-    private boolean updateErrorMessage(String username, String port) {
+    private boolean updateErrorMessage(String username, String server, String port) {
         
         if(username.isEmpty())
             errField.setText("Enter a username.");
+        else if(server.isEmpty())
+            errField.setText("Enter a server.");
         else {
             try {
-                
-                Integer.parseInt(port);
+
                 errField.setText("");
-                return false;  // false = no error
+                if(Integer.parseInt(port) > 0)
+                    return false;  // fale = no error
+                else
+                    throw new RuntimeException();
                 
             } catch(RuntimeException ignored) {
+                errField.setText("Enter a valid port.");
                 return true;  // true = error
             }
         }
@@ -118,14 +124,14 @@ public class Signup {
 
     /**
      * Gets called when "Sign-Up" (see res/fxml/signup.fxml) is pressed.
-     * Signs the user up after checking the validity of his username (see {@link #updateErrorMessage(String, String) updateErrorMessage(value)})
+     * Signs the user up after checking the validity of his username (see {@link #updateErrorMessage(String, String, String) updateErrorMessage(value)})
      * and redirects him to the lobby (see res/fxml/lobby.fxml).
      *
-     * @see #updateErrorMessage(String, String) - checks the validity of a username
+     * @see #updateErrorMessage(String, String, String) - checks the validity of a username
      */
     @FXML public void signup() {
 
-        if(!updateErrorMessage(usernameField.getText(), serverPortField.getText())) {
+        if(!updateErrorMessage(usernameField.getText(), serverIPField.getText(), serverPortField.getText())) {
 
             try {
                 this.serverConnection = new TicTacToeClient(serverIPField.getText(), Integer.parseInt(serverPortField.getText()));
