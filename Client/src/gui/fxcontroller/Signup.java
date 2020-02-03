@@ -36,6 +36,10 @@ public class Signup {
      * @see #updateErrorMessage(String) - updates this field's content
      */
     @FXML public Text errField;
+    
+    @FXML public TextField serverIPField;
+    
+    @FXML public TextField serverPortField;
 
     /**
      * The window in which the Tic Tac Toe game takes place.
@@ -79,7 +83,8 @@ public class Signup {
     @FXML public void initialize() {
         
         // ignores the observed TextField (already stored in usernameField) and old value (not needed) on updateErrorMessage(String) call
-        usernameField.textProperty().addListener((ignored1, ignored2, newValue) -> updateErrorMessage(newValue));
+        usernameField.textProperty().addListener((ignored1, ignored2, newValue) -> updateErrorMessage(newValue, "0"));
+        serverPortField.textProperty().addListener((ignored1, ignored2, newValue) -> updateErrorMessage("foo", newValue));
 
     } // END function initialize()
 
@@ -93,13 +98,20 @@ public class Signup {
      * @see TextField#setText(String) - sets the text of a text field
      * @see #errField - the text field in which the error message is written
      */
-    private boolean updateErrorMessage(String value) {
-
-        if(value.isEmpty())
+    private boolean updateErrorMessage(String username, String port) {
+        
+        if(username.isEmpty())
             errField.setText("Enter a username.");
         else {
-            errField.setText("");
-            return false;  // false = no error
+            try {
+                
+                Integer.parseInt(port);
+                errField.setText("");
+                return false;  // false = no error
+                
+            } catch(RuntimeException ignored) {
+                return true;  // true = error
+            }
         }
 
         return true;  // true = error
@@ -115,8 +127,12 @@ public class Signup {
      */
     @FXML public void signup() {
 
-        if(!updateErrorMessage(usernameField.getText())) {
+        if(!updateErrorMessage(usernameField.getText(), serverPortField.getText())) {
 
+            try {
+                this.serverConnection = new TicTacToeClient(serverIPField.getText(), Integer.parseInt(serverPortField.getText()));
+            } catch(RuntimeException ignored) {}  // won't throw since checked in updateErrorMessage
+            
             String serverResponse = serverConnection.signup(usernameField.getText());
 
             if(serverResponse != null && serverResponse.startsWith("gamelobbies")) {
