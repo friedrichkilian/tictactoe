@@ -74,6 +74,8 @@ public class TicTacToeMatch {
 
     public void opponentLeft() {
 
+        System.out.print("_____________________LEFT");
+
         this.yourTurn = 0;
         this.opponent = null;
 

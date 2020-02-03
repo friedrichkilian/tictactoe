@@ -62,7 +62,7 @@ public class TicTacToeClient extends Client {
 
             case "updatefield": if(currentGame != null) Platform.runLater(() -> currentGame.opponentPicked(Integer.parseInt(pMessage.split(" ", 2)[1]))); break;
             case "opponentjoined": if(currentGame != null) Platform.runLater(() -> currentGame.opponentJoined(pMessage.split(" ", 3)[1], Byte.parseByte(pMessage.split(" ", 3)[2]))); break;
-            case "oponentleft": if(currentGame != null) Platform.runLater(() -> currentGame.opponentLeft()); break;
+            case "opponentleft": if(currentGame != null) Platform.runLater(() -> currentGame.opponentLeft()); break;
             case "addgame": if(lobbyObject != null) Platform.runLater(() -> lobbyObject.addGameEntry(pMessage.split(" ", 4)[1], pMessage.split(" ", 4)[2], pMessage.split(" ", 4)[3])); break;
             case "delgame": if(lobbyObject != null) Platform.runLater(() -> lobbyObject.removeGameEntry(pMessage.split(" ", 2)[1])); break;
             case "error": new UnknownError(pMessage).printStackTrace();
@@ -139,8 +139,10 @@ public class TicTacToeClient extends Client {
             wait(5000);
         } catch(InterruptedException ignored) {}
 
-        if(serverResponse == null)
+        if(serverResponse == null) {
             new TimeoutException("Couldn't pick field " + field + ": Timeout").printStackTrace();
+            return "";
+        }
 
         String returnString = serverResponse;
         serverResponse = null;

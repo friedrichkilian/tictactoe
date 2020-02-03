@@ -127,6 +127,8 @@ public class TicTacToeServer extends Server
 
                     } else if(game.getHost() == self) {
 
+                        send(game.getGuest().getIP(), game.getGuest().getPort(), "opponentleft");
+
                         // Gast wird zum Host, wenn Host das Spiel verlässt
                         game.host = game.getGuest();
                         game.setGuest(null);
@@ -145,6 +147,10 @@ public class TicTacToeServer extends Server
                     } else {
 
                         send(game.getHost().getIP(), game.getHost().getPort(), "opponentleft");
+
+                        sendToAll("addgame " + game.getName() + " " + game.getGameID() + " " + game.getHost().getDisplayName());
+
+                        game.setGuest(null);
 
                         // zu offenen Spielen hinzufügen
                         openGames.append(game);
