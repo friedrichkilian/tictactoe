@@ -35,7 +35,7 @@ public class FXApplication extends Application {
         try {
 
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/signup.fxml"));
-            fxmlLoader.setController(new Signup(primaryStage, new TicTacToeClient(SERVER_IP, SERVER_PORT)));
+            fxmlLoader.setController(new Signup(primaryStage));
             primaryStage.setScene(new Scene(fxmlLoader.load()));
 
         } catch(IOException e) { e.printStackTrace(); }

@@ -25,7 +25,7 @@ public class Signup {
      * The text field in which the user types his username
      * Gets assigned by the {@link javafx.fxml.FXMLLoader} when the signup prompt gets loaded by {@link FXApplication#start(Stage)}
      * 
-     * @see #updateErrorMessage(String) - prints error messages on wrong input (shown in {@link #errField})
+     * @see #updateErrorMessage(String, String) - prints error messages on wrong input (shown in {@link #errField})
      */
     @FXML public TextField usernameField;
 
@@ -33,7 +33,7 @@ public class Signup {
      * The text field in which error messages are displayed.
      * Gets assigned by the {@link javafx.fxml.FXMLLoader} when the signup prompt gets loaded by {@link FXApplication#start(Stage)}
      * 
-     * @see #updateErrorMessage(String) - updates this field's content
+     * @see #updateErrorMessage(String, String) - updates this field's content
      */
     @FXML public Text errField;
     
@@ -62,15 +62,12 @@ public class Signup {
      * Stores assigned parameters in local variables
      *
      * @param primaryStage - the window in which the TicTacToe game takes place
-     * @param serverConnection - represents the connection to the Tic Tac Toe host server
      *
      * @see #primaryStage - the window in which the TicTacToe game takes place
-     * @see #serverConnection - represents the connection to the Tic Tac Toe host server
      */
-    public Signup(Stage primaryStage, TicTacToeClient serverConnection) {
+    public Signup(Stage primaryStage) {
 
         this.primaryStage = primaryStage;
-        this.serverConnection = serverConnection;
 
     } // END constructor Signup(String, TicTacToeClient)
 
@@ -92,7 +89,8 @@ public class Signup {
      * Gets called on usernameFields update (see res/fxml/signup.fxml) or when "Sign-Up" is pressed.
      * Updates the error message in fx:errField (see res/fxml/signup.fxml).
      *
-     * @param value the new value of the username field
+     * @param username the new value of the username field
+     * @param port the new value of the port field
      * @return true when the username is invalid / false when the username is valid
      *
      * @see TextField#setText(String) - sets the text of a text field
@@ -120,10 +118,10 @@ public class Signup {
 
     /**
      * Gets called when "Sign-Up" (see res/fxml/signup.fxml) is pressed.
-     * Signs the user up after checking the validity of his username (see {@link #updateErrorMessage(String) updateErrorMessage(value)})
+     * Signs the user up after checking the validity of his username (see {@link #updateErrorMessage(String, String) updateErrorMessage(value)})
      * and redirects him to the lobby (see res/fxml/lobby.fxml).
      *
-     * @see #updateErrorMessage(String) - checks the validity of a username
+     * @see #updateErrorMessage(String, String) - checks the validity of a username
      */
     @FXML public void signup() {
 
@@ -131,7 +129,7 @@ public class Signup {
 
             try {
                 this.serverConnection = new TicTacToeClient(serverIPField.getText(), Integer.parseInt(serverPortField.getText()));
-            } catch(RuntimeException ignored) {}  // won't throw since checked in updateErrorMessage
+            } catch(RuntimeException ignored) {}  // won't throw since checked in updateErrorMessage
             
             String serverResponse = serverConnection.signup(usernameField.getText());
 

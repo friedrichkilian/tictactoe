@@ -111,7 +111,7 @@ public class Game
             
             boolean allSet = true;
             for(int i = 0; i < 9; i++)
-                if(state[i] == 0)
+                if(field[i] == 0)
                     allSet = false;
             
             if(allSet) {
