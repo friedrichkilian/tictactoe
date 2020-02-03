@@ -66,8 +66,19 @@ public class TicTacToeMatch {
             reset();
 
         } else {
-            yourTurn = 1;
-            turnField.setText("It's your turn!");
+            
+            boolean allSet = true;
+            for(int i = 0; i < 9; i++)
+                if(state[i] == 0)
+                    allSet = false;
+            if(allSet) {
+                first = (byte) -first;
+                reset();
+            } else {
+                yourTurn = 1;
+                turnField.setText("It's your turn!");
+            }
+            
         }
 
     }
@@ -178,8 +189,20 @@ public class TicTacToeMatch {
                 reset();
 
             } else {
-                yourTurn = -1;
-                turnField.setText("Opponent's turn");
+                
+                boolean allSet = true;
+                for(int i = 0; i < 9; i++)
+                    if(state[i] == 0)
+                        allSet = false;
+                
+                if(allSet) {
+                    first = (byte) -first;
+                    reset();
+                } else {
+                    yourTurn = -1;
+                    turnField.setText("Opponent's turn");
+                }
+                
             }
 
         }
