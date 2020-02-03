@@ -146,10 +146,14 @@ public class Lobby {
         // the addGameEntry will remove this pane when there are games (see following loop)
         gameContainer.getChildren().add(noGamePane);
 
-        // startGames looks like: gamelobbies (gamename 1) (gameid 1) (creator 1) ... (gamename n) (gameid n) (cretor n)
-        String[] games = startGames.substring(12).split(" ");  // remove "gamelobbies " prefix
-        for(int i = 0; i < games.length / 3; i++)
-            addGameEntry(games[i * 3], games[i * 3 + 1], games[i * 3 + 2]);
+        if(!startGames.equals("gamelobbies")) {  // if not empty
+
+            // startGames looks like: gamelobbies (gamename 1) (gameid 1) (creator 1) ... (gamename n) (gameid n) (cretor n)
+            String[] games = startGames.substring(12).split(" ");  // remove "gamelobbies " prefix
+            for (int i = 0; i < games.length / 3; i++)
+                addGameEntry(games[i * 3], games[i * 3 + 1], games[i * 3 + 2]);
+
+        }
 
         // ignores the observed TextField (already stored in usernameField) and old value (not needed) on updateErrorMessage(String) call
         gameNameField.textProperty().addListener((ignored1, ignored2, newValue) -> updateErrorMessage(newValue));

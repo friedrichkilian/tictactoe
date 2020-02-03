@@ -17,9 +17,10 @@ public class Player
     /**
      * Constructor for objects of class Player
      */
-    public Player(String pID, Game pActiveGame, String pName)
+    public Player(String pIP, int pPlayerPort, Game pActiveGame, String pName)
     {
-        IP = pID;
+        IP = pIP;
+        this.port = pPlayerPort;
         active = pActiveGame;
         displayName = pName;
     }

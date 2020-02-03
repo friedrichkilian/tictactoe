@@ -4,7 +4,12 @@ import gui.fxcontroller.TicTacToeMatch;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import net.TicTacToeClient;
@@ -37,6 +42,8 @@ public class Game {
 
         gameNameField.setText(gameName);
         creatorNameField.setText("by " + creatorName);
+
+        Tooltip.install(parent, new Tooltip("Game-ID: " + gameID));
 
     }
 

@@ -30,6 +30,8 @@ public class TicTacToeMatch {
 
     public void opponentPicked(int field) {
 
+        state[field] = -1;
+
         Canvas affectedField = null;
         switch(field) {
             case 0: affectedField = field0; break;
@@ -47,7 +49,8 @@ public class TicTacToeMatch {
             return;
 
         affectedField.getGraphicsContext2D().setStroke(Color.RED);
-        affectedField.getGraphicsContext2D().strokeOval(10D, 10D, 40D, 40D);
+        affectedField.getGraphicsContext2D().setLineWidth(5);
+        affectedField.getGraphicsContext2D().strokeOval(10D, 10D, 30D, 30D);
         
         if(state[0] == -1 && state[1] == -1 && state[2] == -1 ||
                 state[3] == -1 && state[4] == -1 && state[5] == -1 ||
@@ -145,6 +148,8 @@ public class TicTacToeMatch {
             String response = serverConnection.pick(field);
 
             if(response.startsWith("ok")) {
+
+                state[field] = 1;
 
                 canvas.getGraphicsContext2D().setStroke(Color.RED);
                 canvas.getGraphicsContext2D().setLineWidth(5);

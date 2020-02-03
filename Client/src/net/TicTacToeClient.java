@@ -3,6 +3,7 @@ package net;
 import gui.fxcontroller.TicTacToeMatch;
 import gui.fxcontroller.lobby.Game;
 import gui.fxcontroller.lobby.Lobby;
+import javafx.application.Platform;
 
 import java.util.UUID;
 import java.util.concurrent.TimeoutException;
@@ -52,15 +53,18 @@ public class TicTacToeClient extends Client {
     public void setCurrentGame(TicTacToeMatch game) { this.currentGame = game; }
     public void setLobbyObject(Lobby lobbyObject) { this.lobbyObject = lobbyObject; }
 
+    @Override
     public synchronized void processMessage(String pMessage) {
+
+        System.out.println("[CLIENT] Received " + pMessage);
 
         switch(pMessage.split(" ", 2)[0]) {
 
-            case "updatefield": if(currentGame != null) currentGame.opponentPicked(Integer.parseInt(pMessage.split(" ", 2)[1])); break;
-            case "opponentjoined": if(currentGame != null) currentGame.opponentJoined(pMessage.split(" ", 3)[1], Byte.parseByte(pMessage.split(" ", 3)[2])); break;
-            case "oponentleft": if(currentGame != null) currentGame.opponentLeft();
-            case "addgame": if(lobbyObject != null) lobbyObject.addGameEntry(pMessage.split(" ", 4)[1], pMessage.split(" ", 4)[2], pMessage.split(" ", 4)[3]); break;
-            case "delgame": if(lobbyObject != null) lobbyObject.removeGameEntry(pMessage.split(" ", 2)[1]); break;
+            case "updatefield": if(currentGame != null) Platform.runLater(() -> currentGame.opponentPicked(Integer.parseInt(pMessage.split(" ", 2)[1]))); break;
+            case "opponentjoined": if(currentGame != null) Platform.runLater(() -> currentGame.opponentJoined(pMessage.split(" ", 3)[1], Byte.parseByte(pMessage.split(" ", 3)[2]))); break;
+            case "oponentleft": if(currentGame != null) Platform.runLater(() -> currentGame.opponentLeft()); break;
+            case "addgame": if(lobbyObject != null) Platform.runLater(() -> lobbyObject.addGameEntry(pMessage.split(" ", 4)[1], pMessage.split(" ", 4)[2], pMessage.split(" ", 4)[3])); break;
+            case "delgame": if(lobbyObject != null) Platform.runLater(() -> lobbyObject.removeGameEntry(pMessage.split(" ", 2)[1])); break;
             case "error": new UnknownError(pMessage).printStackTrace();
             default: serverResponse = pMessage; notify();
 

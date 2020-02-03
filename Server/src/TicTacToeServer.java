@@ -21,17 +21,17 @@ public class TicTacToeServer extends Server
      * Constructor for objects of class TicTacToeServer
      */
     public TicTacToeServer(int pPortnummer)
-    {   
+    {
         super(pPortnummer);
     }
 
     public synchronized void processNewConnection(String pPlayerID, int pPlayerPort)
     {
-        this.send(pPlayerID, pPlayerPort, "Bitte wählen Sie einen Namen um Fortzufahren");
     }
 
     public synchronized void processMessage(String pPlayerIP, int pPlayerPort, String pMessage)
     {
+        System.out.println("[SERVER] Received \"" + pMessage + "\" from " + pPlayerIP + ":" + pPlayerPort);
         String[] incom = pMessage.split(" ", 2);
         clients.toFirst();
         boolean login = false;
@@ -41,15 +41,15 @@ public class TicTacToeServer extends Server
             }
             clients.next();
         }
-        if (login = false){
+        if (login == false){
             if (incom[0].equals("login")){
-                clients.append(new Player(pPlayerIP, null, incom[1]));
+                clients.append(new Player(pPlayerIP, pPlayerPort, null, incom[1]));
                 this.send(pPlayerIP, pPlayerPort, "gamelobbies" + scrapLobbies(openGames));
             } else {
                 this.send(pPlayerIP, pPlayerPort, "error");
             }
         }
-        if (login = true){
+        if (login == true){
             if (incom[0].equals("join")){
                 String ID = incom[1];
                 openGames.toFirst();
@@ -75,7 +75,9 @@ public class TicTacToeServer extends Server
                 }
             }
             if (incom[0].equals("create")){
-                openGames.append(new Game(getPlayer(pPlayerIP, pPlayerPort), UUID.randomUUID(), incom[1]));
+                Game newGame = new Game(getPlayer(pPlayerIP, pPlayerPort), UUID.randomUUID(), incom[1]);
+                openGames.append(newGame);
+                getPlayer(pPlayerIP, pPlayerPort).setActive(newGame);
                 this.send(pPlayerIP, pPlayerPort, "ok " + getGame(pPlayerIP, pPlayerPort).getGameID().toString());
                 sendToAll("addgame " + incom[1] + " " + getGame(pPlayerIP, pPlayerPort).getGameID().toString() + " " + getPlayer(pPlayerIP, pPlayerPort).getDisplayName());
 
@@ -86,12 +88,15 @@ public class TicTacToeServer extends Server
                 Player player = getPlayer(pPlayerIP, pPlayerPort);
                 Game game = player.getActive();
 
-                if(game == null || game.isActive(player))
+                if(game == null || !game.isActive(player)) {
+                    send(pPlayerIP, pPlayerPort, "error");
                     return;
+                }
 
                 try {
                     game.update(Integer.parseInt(incom[1]));
                 } catch(RuntimeException e) {
+                    send(pPlayerIP, pPlayerPort, "error");
                     return;
                 }
 
@@ -99,6 +104,8 @@ public class TicTacToeServer extends Server
                     send(game.getGuest().getIP(), game.getGuest().getPort(), "updatefield " + incom[1]);
                 else
                     send(game.getHost().getIP(), game.getHost().getPort(), "updatefield " + incom[1]);
+
+                send(pPlayerIP, pPlayerPort, "ok");
 
             }
 
@@ -112,9 +119,11 @@ public class TicTacToeServer extends Server
 
                         sendToAll("delgame " + game.getGameID().toString());
                         openGames.toFirst();
-                        while(openGames.hasAccess())
-                            if(openGames.getContent() == game)
+                        while(openGames.hasAccess()) {
+                            if (openGames.getContent() == game)
                                 openGames.remove();
+                            openGames.next();
+                        }
 
                     } else if(game.getHost() == self) {
 
@@ -124,18 +133,30 @@ public class TicTacToeServer extends Server
 
                         sendToAll("addgame " + game.getName() + " " + game.getGameID() + " " + game.getHost().getDisplayName());
 
+                        // zu offenen Spielen hinzufügen
+                        openGames.append(game);
+                        hostedGames.toFirst();
+                        while(hostedGames.hasAccess()) {
+                            if (hostedGames.getContent() == game)
+                                hostedGames.remove();
+                            hostedGames.next();
+                        }
+
+                    } else {
+
+                        send(game.getHost().getIP(), game.getHost().getPort(), "opponentleft");
+
+                        // zu offenen Spielen hinzufügen
+                        openGames.append(game);
+                        hostedGames.toFirst();
+                        while(hostedGames.hasAccess()) {
+                            if (hostedGames.getContent() == game)
+                                hostedGames.remove();
+                            hostedGames.next();
+                        }
                     }
 
                     game.reset();
-
-                    // zu offenen Spielen hinzufügen
-                    openGames.append(game);
-                    hostedGames.toFirst();
-                    while(hostedGames.hasAccess())
-                        if(hostedGames.getContent() == game)
-                            hostedGames.remove();
-
-                    send(game.getHost().getIP(), game.getHost().getPort(), "opponentleft");
 
                     send(pPlayerIP, pPlayerPort, "ok");
 
@@ -158,6 +179,7 @@ public class TicTacToeServer extends Server
             if (clients.getContent().getIP().equals(pPlayerID) && clients.getContent().getPort() == pPlayerPort){
                 return clients.getContent().getActive();
             }
+            clients.next();
         }
         return null;
     }
@@ -169,6 +191,7 @@ public class TicTacToeServer extends Server
             if (clients.getContent().getIP().equals(pPlayerID) && clients.getContent().getPort() == pPlayerPort){
                 return clients.getContent();
             }
+            clients.next();
         }
         return null;
     }
@@ -180,12 +203,14 @@ public class TicTacToeServer extends Server
             if (openGames.getContent().getGameID().equals(pGameID)){
                 return openGames.getContent().getHost();
             }
+            openGames.next();
         }
         hostedGames.toFirst();
         while (hostedGames.hasAccess()){
             if (hostedGames.getContent().getGameID().equals(pGameID)){
                 return hostedGames.getContent().getHost();
             }
+            hostedGames.next();
         }
         return null;
     }
@@ -196,9 +221,9 @@ public class TicTacToeServer extends Server
         List.toFirst();
         while (List.hasAccess()){
             Game current = List.getContent();
-            output = output + "" + current.getName();
-            output = output + "" +current.getGameID().toString();
-            output = output + "" +current.getHost().getDisplayName();
+            output = output + " " +current.getName();
+            output = output + " " +current.getGameID().toString();
+            output = output + " " +current.getHost().getDisplayName();
             List.next();
         }
         return output;

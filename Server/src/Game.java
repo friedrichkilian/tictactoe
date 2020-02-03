@@ -72,6 +72,8 @@ public class Game
             field[pField] = active;
             //Spielerzugwechsel
             active = - active;
+        } else {
+            throw new RuntimeException();
         }
         win();
     }
