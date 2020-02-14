@@ -17,4 +17,5 @@ If using 0 for a dynamic port, you can change the Server class to print the port
 
 ## Credits
 This project is using classes from the Standardsicherung NRW.
+
 Server/src/* mainly by Christian P.
